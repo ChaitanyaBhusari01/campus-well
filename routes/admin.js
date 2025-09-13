@@ -21,7 +21,9 @@ adminRouter.post('/signup', async function (req, res) {
     campusId: campusId,
     campusName: campusName,
   });
-  res.status(201).json({ message: "Admin is now signed up" });
+  res.status(201).json({ 
+    message: "Admin is now signed up" ,
+  });
 });
 
 adminRouter.post('/signin', async function (req, res) {
