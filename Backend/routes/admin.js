@@ -1,48 +1,9 @@
 const express = require('express');
-const { adminModel, resourceModel } = require('../db');
+const { resourceModel } = require('../db');
 const adminRouter = express.Router();
-const JWT = require('jsonwebtoken');
-const { adminauth } = require('../middlewares/adminauth');
-const { JWT_ADMIN_SECRET } = require('../config');
-const bcrypt = require('bcrypt');
 
-adminRouter.post('/signup', async function (req, res) {
-  const { name, email, password, campusId, campusName } = req.body;
-  const admin = await adminModel.findOne({ email: email });
-  if (admin) {
-    return res.status(400).json({ message: "Admin already exists. Please login." });
-  }
 
-  const hashedpassword = await bcrypt.hash(password, 10);
-  await adminModel.create({
-    name: name,
-    email: email,
-    password: hashedpassword,
-    campusId: campusId,
-    campusName: campusName,
-  });
-  res.status(201).json({ 
-    message: "Admin is now signed up" ,
-  });
-});
-
-adminRouter.post('/signin', async function (req, res) {
-  const { email, password } = req.body;
-  const admin = await adminModel.findOne({ email: email });
-  if (!admin) {
-    return res.status(404).json({ message: "Admin not found" });
-  }
-
-  const compare = await bcrypt.compare(password, admin.password);
-  if (!compare) {
-    return res.status(401).json({ message: "Password is incorrect" });
-  }
-
-  const token = JWT.sign({ _id: admin._id, email: admin.email,campusId : admin.campusId }, JWT_ADMIN_SECRET);
-  res.status(200).json({ message: "Admin signed in successfully", token });
-});
-
-adminRouter.get('/resource', adminauth, async function (req, res) {
+adminRouter.get('/resource', authMiddleware, async function (req, res) {
   try {
     const resources = await resourceModel
       .find({ status: "pending" })
@@ -55,7 +16,7 @@ adminRouter.get('/resource', adminauth, async function (req, res) {
   }
 });
 
-adminRouter.patch('/resource/:id/approved', adminauth, async function (req, res) {
+adminRouter.patch('/resource/:id/approved', authMiddleware, async function (req, res) {
   const resourceId = req.params.id;
   if (!resourceId) {
     return res.status(400).json({ message: "No Id of resource is present in the params" });
@@ -81,7 +42,7 @@ adminRouter.patch('/resource/:id/approved', adminauth, async function (req, res)
   }
 });
 
-adminRouter.patch('/resource/:id/rejected', adminauth, async function (req, res) {
+adminRouter.patch('/resource/:id/rejected', authMiddleware, async function (req, res) {
   const resourceId = req.params.id;
   if (!resourceId) {
     return res.status(400).json({ message: "No Id of resource is present in the params" });

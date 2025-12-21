@@ -13,23 +13,21 @@ const Schema = mongoose.Schema;
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
+const userSchema = new Schema({
+    email: {type : String,unique: true, required: true},
+    password: {type: String,required: true},
+    role: {type: String,required: true},
+    refId:{type: ObjectId,required: true}
+})
+
 const adminSchema = new Schema({
     name: { type: String, required: true },
-    email: { type: String, unique: true, required: true },
-    password: { type: String, required: true },
     campusId: { type: String, required: true },
     campusName: { type: String, required: true },
 },{ timestamps: true });
 
 const studentSchema = new Schema({
     name: { type: String, required: true },
-    email: { type: String, 
-            unique: true, 
-            required: true ,
-            trim : true ,
-            lowercase : true
-        },
-    password: { type: String, required: true },
     campusId: { type: String, required: true },
     campusName: { type: String, required: true },
     bookings : [
@@ -45,8 +43,6 @@ const studentSchema = new Schema({
 
 const counsellorSchema = new Schema({
   name: { type: String, required: true },
-  email: { type: String, unique: true, required: true, trim: true, lowercase: true },
-  password: { type: String, required: true },
   campusId: { type: String, required: true },
   campusName: { type: String, required: true },
   specialization: { type: String },  
@@ -95,6 +91,7 @@ const counsellorModel = mongoose.model("counsellor",counsellorSchema);
 const resourceModel = mongoose.model("resource",resourceSchema);
 const helplineModel = mongoose.model("helpline",helplineSchema);
 const bookingModel = mongoose.model ("booking",bookingSchema);
+const userModel = mongoose.model("User",userSchema);
 
 module.exports = {
     studentModel,
@@ -102,7 +99,8 @@ module.exports = {
     counsellorModel,
     resourceModel,
     helplineModel,
-    bookingModel
+    bookingModel,
+    userModel
 };
 
  
