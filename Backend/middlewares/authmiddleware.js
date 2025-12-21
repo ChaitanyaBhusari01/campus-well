@@ -10,9 +10,16 @@ const authMiddleware = (req, res, next) => {
         message: "Authentication required",
       });
     }
+
     const token = authHeader.split(" ")[1];
 
     const decoded = JWT.verify(token, JWT_SECRET);
+
+    if (!decoded || !decoded.userId || !decoded.role) {
+      return res.status(401).json({
+        message: "Invalid token",
+      });
+    }
 
     req.user = {
       userId: decoded.userId,

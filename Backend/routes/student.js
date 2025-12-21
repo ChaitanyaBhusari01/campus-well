@@ -1,88 +1,144 @@
-const express = require('express');
+const express = require("express");
 const studentRouter = express.Router();
-const { studentModel, resourceModel ,bookingModel, counsellorModel , helplineModel} = require('../db');
-const JWT = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+
+const {
+  resourceModel,
+  bookingModel,
+  counsellorModel,
+  helplineModel,
+  studentModel,
+} = require("../db");
+
+const authMiddleware = require("../middlewares/authMiddleware");
+const roleMiddleware = require("../middlewares/roleMiddleware");
 
 
-studentRouter.get('/resource', studentauth, async function (req, res) {
-  try {
-    const resources = await resourceModel
-      .find({ status: "approved" })
-      .populate('uploadedBy', 'name specialization');
+studentRouter.get(
+  "/resource",
+  authMiddleware,
+  roleMiddleware(["student"]),
+  async function (req, res) {
+    try {
+      const resources = await resourceModel
+        .find({ status: "approved" })
+        .populate("uploadedBy", "name specialization");
 
-    return res.status(200).json({ resources });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Problem while loading the resources from the library" });
-  }
-});
-
-studentRouter.get('/counsellors',studentauth ,async function(req,res){
-  try{
-    const campusId = req.student.campusId;
-    const counsellors  = await counsellorModel.find({campusId}).select(-"password");
-    if(counsellors.length === 0){
-      return res.json({message : "there are no counsellors currently registered for your campus"});
+      return res.status(200).json({ resources });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: "Problem while loading resources",
+      });
     }
-    return res.status(200).json({counsellors});
   }
-  catch(error){
-    return res.status(500).json({message : "problem while retrirving the counsellors from db"})
-  }
-});
+);
 
-studentRouter.post('/bookings/:counsellorId/:slot',studentauth,async function(req,res){
-  const {counsellorId , slotId } = req.params;
-  try{
-    const counsellor = await counsellorModel.findOneAndUpdate(
-      {_id:counsellorId ,"availability._id" : slotId,"availabilities.isBooked" : false},
-      {$set :{ "availability.isBooked" : true}},
-      {new : true},
-    );
-    if(!counsellor){
-      return res.status(403).json({message : "the slot is already booked "});
-    } 
-    else{
-      const bookedSlot =counsellor.availability.find(s => s._id.toString() === slotId);
+studentRouter.get(
+  "/counsellors",
+  authMiddleware,
+  roleMiddleware(["student"]),
+  async function (req, res) {
+    try {
+      const student = await studentModel.findById(req.user.refId);
+      if (!student) {
+        return res.status(404).json({ message: "Student profile not found" });
+      }
 
-      // Step 3: Create booking record
-      const booking = await bookingModel.create({
-        studentId,
-        counsellorId,
-        slotId,
-        date: bookedSlot.date,
-        startTime: bookedSlot.startTime,
-        endTime: bookedSlot.endTime
+      const counsellors = await counsellorModel.find({
+        campusId: student.campusId,
       });
 
-      res.json({ message: "Booking successful", booking });
+      if (counsellors.length === 0) {
+        return res.json({
+          message: "No counsellors registered for your campus",
+        });
+      }
+
+      return res.status(200).json({ counsellors });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Problem retrieving counsellors",
+      });
     }
   }
-  catch(error){
-    return res.status(500).json({message : `there was a error while booking a appointment ${error}`});
-  }
+);
 
 
+studentRouter.post(
+  "/bookings/:counsellorId/:slotId",
+  authMiddleware,
+  roleMiddleware(["student"]),
+  async function (req, res) {
+    const { counsellorId, slotId } = req.params;
 
-});
+    try {
+      const counsellor = await counsellorModel.findOneAndUpdate(
+        {
+          _id: counsellorId,
+          "availability._id": slotId,
+          "availability.isBooked": false,
+        },
+        {
+          $set: { "availability.$.isBooked": true },
+        },
+        { new: true }
+      );
 
-studentRouter.get('/helpline/:language',studentauth,async function (req,res){
-  const language = req.params.language;
-  try{
-    const helplines = await helplineModel.find({language});
-    if(helplines.lenght === 0){
-      return res.status(403).json({message : "there are no helplines for the specified language"});
+      if (!counsellor) {
+        return res
+          .status(403)
+          .json({ message: "Slot already booked or invalid" });
+      }
+
+      const bookedSlot = counsellor.availability.find(
+        (s) => s._id.toString() === slotId
+      );
+
+      const booking = await bookingModel.create({
+        studentId: req.user.refId,
+        counsellorId,
+        date: bookedSlot.date,
+        slot: `${bookedSlot.startTime}-${bookedSlot.endTime}`,
+      });
+
+      return res.status(201).json({
+        message: "Booking successful",
+        booking,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Error while booking appointment",
+      });
     }
-    return res.status(200).json({helplines});
-
   }
-  catch(error){
-    return res.status(500).json({message :"problem in fetching the helplines from the DB"});
+);
+
+
+studentRouter.get(
+  "/helpline/:language",
+  authMiddleware,
+  roleMiddleware(["student"]),
+  async function (req, res) {
+    const { language } = req.params;
+
+    try {
+      const helplines = await helplineModel.find({
+        languages: language,
+      });
+
+      if (helplines.length === 0) {
+        return res.status(404).json({
+          message: "No helplines available for this language",
+        });
+      }
+
+      return res.status(200).json({ helplines });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Problem fetching helplines",
+      });
+    }
   }
-});
+);
 
-
-module.exports = {
-  studentRouter: studentRouter,
-};
+module.exports = { studentRouter };

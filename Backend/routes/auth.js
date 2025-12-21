@@ -7,7 +7,6 @@ const userRouter = express.Router();
 const { userModel, counsellorModel, studentModel } = require("../db");
 const {JWT_SECRET} = require("../config");
 
-// POST /auth/signup
 userRouter.post("/signup", async function (req, res) {
   try {
     const {
