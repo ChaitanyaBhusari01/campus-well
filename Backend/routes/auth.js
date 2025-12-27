@@ -90,9 +90,9 @@ userRouter.post('/login',async function(req,res){
             return res.json({message:"Incorrect credentials"});
         } 
         const token = JWT.sign({
-            refId : user.refId,
-            role  : user.role,
             userId : user._id,
+            refId : user.refId,
+            role  : user.role, 
         },JWT_SECRET);
         return res.json({message : "login successful" ,token });
     }
