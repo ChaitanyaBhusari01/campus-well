@@ -123,20 +123,20 @@ const bookingSchema = new Schema(
 );
 
 
-const UserModel = mongoose.model("User", userSchema);
-const AdminModel = mongoose.model("Admin", adminSchema);
-const StudentModel = mongoose.model("Student", studentSchema);
-const CounsellorModel = mongoose.model("Counsellor", counsellorSchema);
-const ResourceModel = mongoose.model("Resource", resourceSchema);
-const HelplineModel = mongoose.model("Helpline", helplineSchema);
-const BookingModel = mongoose.model("Booking", bookingSchema);
+const userModel = mongoose.model("User", userSchema);
+const adminModel = mongoose.model("Admin", adminSchema);
+const studentModel = mongoose.model("Student", studentSchema);
+const counsellorModel = mongoose.model("Counsellor", counsellorSchema);
+const resourceModel = mongoose.model("Resource", resourceSchema);
+const helplineModel = mongoose.model("Helpline", helplineSchema);
+const bookingModel = mongoose.model("Booking", bookingSchema);
 
 module.exports = {
-  UserModel,
-  AdminModel,
-  StudentModel,
-  CounsellorModel,
-  ResourceModel,
-  HelplineModel,
-  BookingModel,
+  userModel,
+  adminModel,
+  studentModel,
+  counsellorModel,
+  resourceModel,
+  helplineModel,
+  bookingModel,
 };

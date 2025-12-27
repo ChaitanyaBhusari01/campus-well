@@ -24,7 +24,7 @@ userRouter.post("/signup", async function (req, res) {
       return res.status(400).json({ message: "Invalid role" });
     }
 
-    const existingUser = await userModel.findOne({ email });
+    const existingUser = await userModel.findOne({ email : email });
     if (existingUser) {
       return res
         .status(409)
@@ -71,7 +71,7 @@ userRouter.post("/signup", async function (req, res) {
   } catch (err) {
     console.error(err);
     return res.status(500).json({
-      message: "Issue during signup",
+      message: "Issue during signup" + err,
     });
   }
 });

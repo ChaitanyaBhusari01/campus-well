@@ -12,7 +12,6 @@ const {
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
 
-
 studentRouter.get(
   "/resource",
   authMiddleware,
