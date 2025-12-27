@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
+
 
 const AuthContext = createContext(null);
 
@@ -9,26 +11,28 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
+    if (storedToken) {
+      const decoded = jwtDecode(storedToken);
 
-    if (storedToken && storedUser) {
       setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      setUser({
+        userId: decoded.userId,
+        role: decoded.role,
+        refId: decoded.refId,
+      });
     }
-
-    setLoading(false);
+      setLoading(false);
     },[]);
 
-  const login=(user,token)=>{
-    localStorage.setItem({"token" : token});
-    localStorage.setItem({'user' : user});
+  const login=(token)=>{
+    localStorage.setItem("token" , token);
     setToken(token);
-    setUser(user);
+    const decoded = jwtDecode(token);
+    setUser({userId : decoded.userId, role : decoded.role, refId : decoded.refId});
   };
 
   const logout = () =>{
     localStorage.removeItem("token");
-    localStorage.setItem("user");
     setToken(null);
     setUser(null);
   }
@@ -46,6 +50,6 @@ export function AuthProvider({ children }) {
   )
 }
 
-export default useAuth=()=>{
-    useContext(AuthContext);
+export function useAuth() {
+    return useContext(AuthContext);
 } 
