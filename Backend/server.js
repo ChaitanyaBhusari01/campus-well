@@ -4,13 +4,25 @@ const mongoose = require("mongoose");
 
 const { MONGODBURL, PORT } = require("./config");
 
+const cors = require("cors");
+
+const app = express();
+app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
+
 const { adminRouter } = require("./routes/admin");
 const { counsellorRouter } = require("./routes/counsellor");
 const { studentRouter } = require("./routes/student");
 const { userRouter } = require("./routes/auth");
 
-const app = express();
-app.use(express.json());
+
 
 app.use("/auth", userRouter);
 app.use("/student", studentRouter);
