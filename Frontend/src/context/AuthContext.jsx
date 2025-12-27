@@ -29,6 +29,7 @@ export function AuthProvider({ children }) {
     setToken(token);
     const decoded = jwtDecode(token);
     setUser({userId : decoded.userId, role : decoded.role, refId : decoded.refId});
+    return decoded;
   };
 
   const logout = () =>{

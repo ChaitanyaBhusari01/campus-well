@@ -10,6 +10,7 @@ import CounsellorDashboard from "./pages/counsellor/Dashboard";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
+import StudentResources from "./pages/student/Resource";
 
 function App() {
   return (
@@ -27,6 +28,13 @@ function App() {
               <StudentDashboard />
             </DashboardLayout>
           }
+        />
+        <Route path="/student/resources" 
+        element={
+          <DashboardLayout>
+            <StudentResources />
+          </DashboardLayout>
+        }
         />
       </Route>
 

@@ -1,9 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { use, useState } from "react";
 import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
 
@@ -11,6 +13,7 @@ export default function Login() {
   const [password,setPassword] = useState("");
 
   const {login} = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit=async(e)=>{
     e.preventDefault();
@@ -18,10 +21,21 @@ export default function Login() {
       const response= await api.post("/auth/login",{email,password});
 
       const token = response.data.token;
-      login(token)
+      const decoded = login(token);
 
-      console.log("Login successful",response.data);
-
+      if(decoded.role==="student"){
+        navigate("/student");
+      }
+      else if(decoded.role==="counsellor"){
+        navigate("/counsellor");
+      } 
+      else if(decoded.role==="admin"){
+        navigate("/admin");
+      }   
+      else{
+        console.error("Unknown user role");
+        return ;
+      }
     }
     catch(err){
       console.error("Login failed",err);
