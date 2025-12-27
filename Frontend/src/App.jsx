@@ -15,7 +15,7 @@ function App() {
   return (
     <Routes>
       {/* Public */}
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
 
       {/* Student */}
