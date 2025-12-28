@@ -10,7 +10,7 @@ const {
 } = require("../db");
 
 const authMiddleware = require("../middlewares/authMiddleware");
-const roleMiddleware = require("../middlewares/roleMiddleware");
+const roleMiddleware = require("../middlewares/roles");
 
 studentRouter.get(
   "/resource",
@@ -114,20 +114,16 @@ studentRouter.post(
 
 
 studentRouter.get(
-  "/helpline/:language",
+  "/helplines",
   authMiddleware,
   roleMiddleware(["student"]),
   async function (req, res) {
-    const { language } = req.params;
-
     try {
-      const helplines = await helplineModel.find({
-        languages: language,
-      });
+      const helplines = await helplineModel.find({});
 
       if (helplines.length === 0) {
         return res.status(404).json({
-          message: "No helplines available for this language",
+          message: "No helplines available",
         });
       }
 

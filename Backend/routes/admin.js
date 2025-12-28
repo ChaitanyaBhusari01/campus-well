@@ -2,7 +2,7 @@ const express = require("express");
 const { resourceModel } = require("../db");
 
 const authMiddleware = require("../middlewares/authMiddleware");
-const roleMiddleware = require("../middlewares/roleMiddleware");
+const roleMiddleware = require("../middlewares/roles");
 
 const adminRouter = express.Router();
 
