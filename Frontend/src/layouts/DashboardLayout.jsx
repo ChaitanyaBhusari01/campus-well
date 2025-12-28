@@ -11,6 +11,7 @@ export default function DashboardLayout({ children }) {
       { label: "Dashboard", path: "/student" },
       { label: "Resources", path: "/student/resources" },
       { label: "Bookings", path: "/student/bookings" },
+      {label : "Helplines" , path : "/student/helplines"}
     ],
 
     counsellor: [

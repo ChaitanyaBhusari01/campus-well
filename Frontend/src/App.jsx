@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import { Outlet } from "react-router-dom";
 
 import Login from "./pages/auth/login";
 import Unauthorized from "./pages/Unauthorized";
@@ -11,6 +12,8 @@ import CounsellorDashboard from "./pages/counsellor/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import StudentResources from "./pages/student/Resource";
+import StudentBookings from "./pages/student/Bookings";
+import Helplines from "./pages/student/Helplines";
 
 function App() {
   return (
@@ -25,17 +28,15 @@ function App() {
           path="/student/*"
           element={
             <DashboardLayout>
-              <StudentDashboard />
+              <Outlet />
             </DashboardLayout>
           }
-        />
-        <Route path="/student/resources" 
-        element={
-          <DashboardLayout>
-            <StudentResources />
-          </DashboardLayout>
-        }
-        />
+        >
+          <Route index element={<StudentDashboard />} />
+          <Route path="resources" element={<StudentResources />} />
+          <Route path="bookings" element={<StudentBookings />} />
+          <Route path="helplines" element={<Helplines/>}/>
+        </Route>
       </Route>
 
       {/* Counsellor */}

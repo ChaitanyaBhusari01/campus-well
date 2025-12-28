@@ -1,5 +1,4 @@
 import DashboardLayout from "@/layouts/DashboardLayout";
-import StudentResources from "./Resource";
 
 const StudentDashboard=()=>{
     return(
