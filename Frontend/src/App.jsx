@@ -11,9 +11,14 @@ import CounsellorDashboard from "./pages/counsellor/Dashboard";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
+
 import StudentResources from "./pages/student/Resource";
-import StudentBookings from "./pages/student/Bookings";
+import StudentBookings from "./pages/student/Allcounsellors";
 import Helplines from "./pages/student/Helplines";
+import Allcounsellors from "./pages/student/Allcounsellors";
+import Counsellorslots from "./pages/student/Counsellorslots";
+import Chatpage from "./pages/student/Chatpage";
+
 
 function App() {
   return (
@@ -36,6 +41,9 @@ function App() {
           <Route path="resources" element={<StudentResources />} />
           <Route path="bookings" element={<StudentBookings />} />
           <Route path="helplines" element={<Helplines/>}/>
+          <Route path = "Allcounsellors" element = {<Allcounsellors/>}/>
+          <Route path = "counsellors/:counsellorId" element = {<Counsellorslots/>}/>
+          <Route path = "chat" element = {<Chatpage/>}/>
         </Route>
       </Route>
 
