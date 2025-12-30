@@ -122,6 +122,15 @@ const bookingSchema = new Schema(
   { timestamps: true }
 );
 
+const postSchema = new Schema(
+  {
+    author: { type: ObjectId, ref: "Student", required: true },
+    content: { type: String, required: true },
+    imageUrl: { type: String }, // optional
+  },
+  { timestamps: true }
+);
+
 
 const userModel = mongoose.model("User", userSchema);
 const adminModel = mongoose.model("Admin", adminSchema);
@@ -130,6 +139,7 @@ const counsellorModel = mongoose.model("Counsellor", counsellorSchema);
 const resourceModel = mongoose.model("Resource", resourceSchema);
 const helplineModel = mongoose.model("Helpline", helplineSchema);
 const bookingModel = mongoose.model("Booking", bookingSchema);
+const postModel = mongoose.model("Post",postSchema);
 
 module.exports = {
   userModel,
@@ -139,4 +149,5 @@ module.exports = {
   resourceModel,
   helplineModel,
   bookingModel,
+  postModel,
 };

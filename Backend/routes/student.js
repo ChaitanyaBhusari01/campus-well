@@ -32,6 +32,31 @@ studentRouter.get(
   }
 );
 
+
+studentRouter.get(
+  "/helplines",
+  authMiddleware,
+  roleMiddleware(["student"]),
+  async function (req, res) {
+    try {
+      const helplines = await helplineModel.find({});
+
+      if (helplines.length === 0) {
+        return res.status(404).json({
+          message: "No helplines available",
+        });
+      }
+
+      return res.status(200).json({ helplines });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Problem fetching helplines",
+      });
+    }
+  }
+); 
+
+
 studentRouter.get(
   "/counsellors",
   authMiddleware,
@@ -129,28 +154,31 @@ studentRouter.post(
   }
 );
 
+studentRouter.post("/post",authMiddleware,role["student"],upload.singe("image") , async (req,res)=>{
+  try{
+    const {title , content} = req.body;
+    const imageUrl = req.file ? req.file.path : null;
 
-studentRouter.get(
-  "/helplines",
-  authMiddleware,
-  roleMiddleware(["student"]),
-  async function (req, res) {
-    try {
-      const helplines = await helplineModel.find({});
-
-      if (helplines.length === 0) {
-        return res.status(404).json({
-          message: "No helplines available",
-        });
-      }
-
-      return res.status(200).json({ helplines });
-    } catch (error) {
-      return res.status(500).json({
-        message: "Problem fetching helplines",
-      });
+    if(!title || !content){
+      return res.status(400).json({message : "Title and content are required"});
     }
+
+    const newPost = await postModel.create({
+      author : req.user.refId,
+      title,
+      content,
+      imageUrl : imageUrl,
+    });
+    res.status(201).json({message : "Post created successfully", post : newPost});
+
   }
-);
+  catch(error){
+    res.status(500).json({message : "Error creating post"});
+  }
+})
+
+
+
+
 
 module.exports = { studentRouter };
