@@ -62,6 +62,23 @@ studentRouter.get(
   }
 );
 
+studentRouter.get("/counsellors/:counsellorId", async (req, res) => {
+  const { counsellorId } = req.params;
+
+  try{
+    const counsellor = await counsellorModel.findOne({_id : counsellorId});
+    if(!counsellor){
+      return res.status(404).json({message : "Counsellor not found"});
+    }
+    return res.status(200).json({  availability : counsellor.availability})
+
+  }
+  catch(error){
+    res.status(500).json({message : "Error fetching the slots"});
+  }
+
+})
+
 
 studentRouter.post(
   "/bookings/:counsellorId/:slotId",
