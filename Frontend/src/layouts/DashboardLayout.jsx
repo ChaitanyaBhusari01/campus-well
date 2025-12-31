@@ -10,8 +10,9 @@ export default function DashboardLayout({ children }) {
     student: [
       { label: "Dashboard", path: "/student" },
       { label: "Resources", path: "/student/resources" },
-      { label: "Bookings", path: "/student/bookings" },
-      {label : "Helplines" , path : "/student/helplines"}
+      { label: "All Counsellors", path: "/student/Allcounsellors" },
+      {label : "Helplines" , path : "/student/helplines"},
+      {label : "Forum" , path : "/student/forum"}
     ],
 
     counsellor: [
