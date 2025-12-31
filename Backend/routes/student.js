@@ -7,10 +7,13 @@ const {
   counsellorModel,
   helplineModel,
   studentModel,
+  postModel,
 } = require("../db");
 
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roles");
+const upload = require("../utils/multer");
+
 
 studentRouter.get(
   "/resource",
@@ -87,7 +90,7 @@ studentRouter.get(
   }
 );
 
-studentRouter.get("/counsellors/:counsellorId", async (req, res) => {
+studentRouter.get("/counsellors/:counsellorId", authMiddleware, roleMiddleware(["student"]), async (req, res) => {
   const { counsellorId } = req.params;
 
   try{
@@ -154,7 +157,7 @@ studentRouter.post(
   }
 );
 
-studentRouter.post("/post",authMiddleware,role["student"],upload.singe("image") , async (req,res)=>{
+studentRouter.post("/post",authMiddleware,roleMiddleware(["student"]),upload.single("image") , async (req,res)=>{
   try{
     const {title , content} = req.body;
     const imageUrl = req.file ? req.file.path : null;
@@ -174,6 +177,19 @@ studentRouter.post("/post",authMiddleware,role["student"],upload.singe("image") 
   }
   catch(error){
     res.status(500).json({message : "Error creating post"});
+  }
+});
+
+studentRouter.get("/posts",authMiddleware,roleMiddleware(["student"]),async(req,res)=>{
+  try{
+    const posts = await postModel.find({})
+
+    res.status(200).json({posts : posts});
+    
+
+  }
+  catch(err){
+    res.status(500).json({message : "Error fetching posts"});
   }
 })
 

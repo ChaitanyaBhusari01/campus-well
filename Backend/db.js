@@ -125,6 +125,7 @@ const bookingSchema = new Schema(
 const postSchema = new Schema(
   {
     author: { type: ObjectId, ref: "Student", required: true },
+    title : { type: String, required: true },
     content: { type: String, required: true },
     imageUrl: { type: String }, // optional
   },
