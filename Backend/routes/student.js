@@ -182,17 +182,29 @@ studentRouter.post("/post",authMiddleware,roleMiddleware(["student"]),upload.sin
 
 studentRouter.get("/posts",authMiddleware,roleMiddleware(["student"]),async(req,res)=>{
   try{
-    const posts = await postModel.find({})
-
-    res.status(200).json({posts : posts});
-    
+    const posts = await postModel
+    .find({})
+    .sort({ createdAt : -1});
+    res.status(200).json({posts : posts});  
 
   }
   catch(err){
     res.status(500).json({message : "Error fetching posts"});
   }
-})
+});
 
+studentRouter.get("/my-posts",authMiddleware,roleMiddleware(["student"]),async(req,res)=>{
+  try{
+    const myPosts = await postModel
+    .find({author : req.user.refId})
+    .sort({ createdAt : -1});
+
+    res.status(200).json({posts : myPosts});
+  }
+  catch(err){
+    res.status(500).json({message : "Error fetching your posts"});
+  }
+});
 
 
 
