@@ -53,27 +53,28 @@ const Counsellorslots = () => {
   };
 
   return (
-    <div>
-      <h2>Available slots</h2>
+    <div className="p-6">
+      <h2 className="text-xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-teal-400">Available slots</h2>
 
-      {slots.map((item) => (
-        <Card key={item._id || item.date + item.startTime}>
-          <CardHeader>
-            <CardTitle>Session slot</CardTitle>
-          </CardHeader>
+      <div className="space-y-3">
+        {slots.map((item, i) => (
+          <Card key={item._id || item.date + item.startTime} className="fade-in-up" style={{ animationDelay: `${i * 60}ms` }}>
+            <CardHeader>
+              <CardTitle>Session slot</CardTitle>
+            </CardHeader>
 
-          {item.isBooked ? (
-            <CardContent>Slot not available</CardContent>
-          ) : (
-            <CardContent>
-              <strong>{item.date}</strong> — {item.startTime} to{" "}
-              {item.endTime}
-              <br/>
-            <Button onClick={handleBooking(item._id)} >Book Now</Button>
-            </CardContent>
-          )}
-        </Card>
-      ))}
+            {item.isBooked ? (
+              <CardContent>Slot not available</CardContent>
+            ) : (
+              <CardContent>
+                <strong>{item.date}</strong> — {item.startTime} to {item.endTime}
+                <br/>
+                <Button onClick={handleBooking(item._id)} className="mt-3 btn-gradient">Book Now</Button>
+              </CardContent>
+            )}
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };

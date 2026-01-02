@@ -27,25 +27,25 @@ const Allcounsellors = () => {
         fetchCounsellors();
     }, []);
     return (
-        <div>Student can book sessions with the counselor
-            <h1>Bookings Page</h1>
-            <div className = "" >
-                {counsellors.map((item)=>(
-                    <Card key = {item._id} className = "mb-4">
+        <div className="p-6">
+            <h1 className="text-2xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-teal-400">All Counsellors</h1>
+
+            <div className="space-y-4">
+                {counsellors.map((item, i) => (
+                    <Card key={item._id} className="fade-in-up" style={{ animationDelay: `${i * 60}ms` }}>
                         <CardHeader>
-                            <CardTitle>{item.name}</CardTitle>
-                            <CardTitle>Specialization: {item.specialization}</CardTitle>
+                            <CardTitle className="text-lg">{item.name}</CardTitle>
+                            <div className="text-sm text-slate-600">Specialization: {item.specialization}</div>
                         </CardHeader>
                         <CardContent>
-                            <p className = "text-sm mb-2">Campus Name: {item.campusName}</p>
-                            <p className = "text-sm mb-2">Campus ID: {item.campusId}</p>
+                            <p className="text-sm mb-2">Campus Name: {item.campusName}</p>
+                            <p className="text-sm mb-2">Campus ID: {item.campusId}</p>
                         </CardContent>
-                        <Button className="my-2" onClick={()=>navigate(`/student/counsellors/${item._id}`)}>Book Session</Button>
-                        <br/>
-
+                        <div className="p-4">
+                            <Button className="my-2 btn-gradient" onClick={() => navigate(`/student/counsellors/${item._id}`)}>Book Session</Button>
+                        </div>
                     </Card>
-                ))
-            }
+                ))}
             </div>
         </div>
     )

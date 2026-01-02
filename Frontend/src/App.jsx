@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { Outlet } from "react-router-dom";
 
+import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/login";
 import Unauthorized from "./pages/Unauthorized";
 
@@ -23,7 +24,8 @@ function App() {
   return (
     <Routes>
       {/* Public */}
-      <Route path="/" element={<Login />} />
+      <Route path = "/" element = {<Signup/>}/>
+      <Route path="/login" element={<Login />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
 
       {/* Student */}

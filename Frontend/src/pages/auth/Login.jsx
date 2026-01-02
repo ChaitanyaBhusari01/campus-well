@@ -44,29 +44,29 @@ export default function Login() {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Card className="w-[360px]">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-50 to-white p-6">
+      <Card className="w-[380px] p-2 card-glow">
         <CardHeader>
-          <CardTitle>Login to CampusWell</CardTitle>
+          <CardTitle className="text-center text-2xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-teal-400">Login to CampusWell</CardTitle>
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-3">
             <Input
-              type="email" 
+              type="email"
               placeholder="Email"
               value={email}
-              onChange={(e)=>setEmail(e.target.value)} 
+              onChange={(e)=>setEmail(e.target.value)}
             />
             <Input
-              type="password" 
+              type="password"
               placeholder="Password"
               value={password}
               onChange={(e)=>setPassword(e.target.value)}
             />
-            <Button type="submit"className="w-full">Login</Button>
+            <Button type="submit" className="w-full btn-gradient">Login</Button>
           </form>
-          
+
         </CardContent>
       </Card>
     </div>

@@ -14,7 +14,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../api/axios";
@@ -45,7 +44,9 @@ const Forum = () => {
 
   useEffect(() => {
     fetchPosts();
-  }, [token]);
+    const interval = setInterval(fetchPosts,5000);
+    return () => clearInterval(interval);
+  }, []);
 
   // create post
   const handleSubmit = async (e) => {
@@ -70,7 +71,6 @@ const Forum = () => {
       setImage(null);
 
       fetchPosts();
-      setUploading(false);
     } catch (err) {
       console.error("Error creating post:", err);
     }
@@ -81,16 +81,20 @@ const Forum = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <Card>
+    <div className="p-6 space-y-6 bg-gradient-to-b from-white via-slate-50 to-slate-100 min-h-screen">
+      <Card className="card-glow overflow-hidden">
         <CardHeader>
-          <CardTitle>Share something with the community</CardTitle>
+          <CardTitle className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-teal-400">
+            Share something with the community
+          </CardTitle>
         </CardHeader>
 
         <CardContent>
-          <Dialog open = {open} onOpenChange = {setOpen}>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button onClick = {() => setOpen(true)}>Create Post</Button>
+              <Button onClick={() => setOpen(true)} className="btn-gradient float-slow px-4 py-2">
+                Create Post
+              </Button>
             </DialogTrigger>
 
             <DialogContent>
@@ -118,12 +122,10 @@ const Forum = () => {
                   accept="image/*"
                   onChange={(e) => setImage(e.target.files[0])}
                 />
-                
-                <Button disabled={uploading} type="submit" className="w-full">
-                    Post
+
+                <Button disabled={uploading} type="submit" className="w-full btn-gradient">
+                  {uploading ? "Posting..." : "Post"}
                 </Button>
-                
-                
               </form>
             </DialogContent>
           </Dialog>
@@ -132,21 +134,23 @@ const Forum = () => {
 
       {/* POSTS */}
       <div className="space-y-4">
-        {posts.map((post) => (
-          <Card key={post._id}>
+        {posts.map((post, index) => (
+          <Card
+            key={post._id}
+            className="card-glow fade-in-up"
+            style={{ animationDelay: `${index * 80}ms` }}
+          >
             <CardHeader>
-              <CardTitle>{post.title}</CardTitle>
+              <CardTitle className="text-lg font-semibold text-slate-700">
+                {post.title}
+              </CardTitle>
             </CardHeader>
 
             <CardContent>
-              <p>{post.content}</p>
+              <p className="text-slate-600 leading-relaxed">{post.content}</p>
 
               {post.imageUrl && (
-                <img
-                  src={post.imageUrl}
-                  alt="post"
-                  className="mt-3 rounded"
-                />
+                <img src={post.imageUrl} alt="post" className="mt-3 post-image" />
               )}
             </CardContent>
           </Card>
