@@ -8,6 +8,7 @@ const {
   helplineModel,
   studentModel,
   postModel,
+  assessmentModel,
 } = require("../db");
 
 const authMiddleware = require("../middlewares/authMiddleware");
@@ -205,6 +206,45 @@ studentRouter.get("/my-posts",authMiddleware,roleMiddleware(["student"]),async(r
     res.status(500).json({message : "Error fetching your posts"});
   }
 });
+
+studentRouter.post("/screenings/PHQ-9",authMiddleware,roleMiddleware(['student']),async(req,res)=>{
+  try{
+    let {answers} = req.body;
+
+    if (!answers || !Array.isArray(answers) || answers.length !== 9) {
+      return res.status(400).json({
+        message: "PHQ-9 requires exactly 9 answers",
+      });
+    }
+    
+    const score = answers.reduce((a,b)=>a+b,0);
+
+    const severity = 
+    score<=4 ? "minimal"
+      : score<=9 ? "mild"
+      : score <=14 ? "moderate"
+      : score <=19  ? "moderately severe"
+      : "Severe" ;
+
+    const response = await assessmentModel.create({
+      studentId : req.user.refId,
+      type : "PHQ-9",
+      answers : answers,
+      score : score,
+      severity : severity
+    });
+     res.status(201).json({
+        message: "Assessment recorded",
+        score,
+        severity,
+      });
+
+  }
+  catch(err){
+    res.status(500).json({message : `error occured while phq-9 screening ${err}`});
+    console.log(err);
+  }
+})
 
 
 

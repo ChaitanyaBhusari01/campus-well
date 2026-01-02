@@ -132,6 +132,15 @@ const postSchema = new Schema(
   { timestamps: true }
 );
 
+const assessmentSchema = new Schema({
+  studentId :{ type : ObjectId , required:true, ref : "Student" },
+  type : {type : String ,enum : ["PHQ-9","GAD-7"]},
+  answers : {type : [Number]},
+  score : {type:String},
+  severity : {type : String}
+
+})
+
 
 const userModel = mongoose.model("User", userSchema);
 const adminModel = mongoose.model("Admin", adminSchema);
@@ -141,6 +150,7 @@ const resourceModel = mongoose.model("Resource", resourceSchema);
 const helplineModel = mongoose.model("Helpline", helplineSchema);
 const bookingModel = mongoose.model("Booking", bookingSchema);
 const postModel = mongoose.model("Post",postSchema);
+const assessmentModel = mongoose.model("Assessment",assessmentSchema);
 
 module.exports = {
   userModel,
@@ -151,4 +161,5 @@ module.exports = {
   helplineModel,
   bookingModel,
   postModel,
+  assessmentModel
 };
