@@ -20,7 +20,11 @@ export default function Login() {
     try{
       const response= await api.post("/auth/login",{email,password});
 
-      const token = response.data.token;
+      const token = response.data?.token;
+      if (!token) {
+        alert("Login failed: no token returned.");
+        return;
+      }
       const decoded = login(token);
 
       if(decoded.role==="student"){
@@ -39,6 +43,7 @@ export default function Login() {
     }
     catch(err){
       console.error("Login failed",err);
+      alert("invalid email or password");
     }
   }
 

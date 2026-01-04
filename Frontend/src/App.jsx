@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { Outlet } from "react-router-dom";
 
+import Landing from "./pages/Landing"
 import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/login";
 import Unauthorized from "./pages/Unauthorized";
@@ -18,13 +19,15 @@ import Allcounsellors from "./pages/student/Allcounsellors";
 import Helplines from "./pages/student/Helplines";
 import Counsellorslots from "./pages/student/Counsellorslots";
 import Forum from "./pages/student/Forum";
+import Screening from "./pages/student/Screening";
 
 
 function App() {
   return (
     <Routes>
       {/* Public */}
-      <Route path = "/" element = {<Signup/>}/>
+      <Route path = "/" element = {<Landing/>}/>
+      <Route path = "/signup" element = {<Signup/>}/>
       <Route path="/login" element={<Login />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -44,6 +47,7 @@ function App() {
           <Route path = "Allcounsellors" element = {<Allcounsellors/>}/>
           <Route path = "counsellors/:counsellorId" element = {<Counsellorslots/>}/>
           <Route path = "forum" element = {<Forum/>}/>
+          <Route path = "Screening" element = {<Screening/>}/>
         </Route>
       </Route>
 

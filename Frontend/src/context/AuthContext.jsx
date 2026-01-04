@@ -25,11 +25,25 @@ export function AuthProvider({ children }) {
     },[]);
 
   const login=(token)=>{
-    localStorage.setItem("token" , token);
-    setToken(token);
-    const decoded = jwtDecode(token);
-    setUser({userId : decoded.userId, role : decoded.role, refId : decoded.refId});
-    return decoded;
+    if(token){
+      localStorage.setItem("token" , token);
+      setToken(token);
+      try{
+        const decoded = jwtDecode(token);
+        setUser({userId : decoded.userId, role : decoded.role, refId : decoded.refId});
+        return decoded;
+      }
+      catch(err){
+        console.log("error whilw loging in " + err);
+        localStorage.removeItem("token");
+        setToken(null);
+      }
+      
+    }
+    else{
+      return console.log("Invalid token")
+    }
+    
   };
 
   const logout = () =>{
