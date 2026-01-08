@@ -16,13 +16,14 @@ export default function DashboardLayout({ children }) {
       { label: "All Counsellors", path: "/student/Allcounsellors" },
       { label: "Helplines", path: "/student/helplines" },
       { label: "Forum", path: "/student/forum" },
-      {label : "Screening" , path: "/student/Screening"}
+      { label : "Screening", path: "/student/Screening"}
     ],
 
     counsellor: [
       { label: "Dashboard", path: "/counsellor" },
-      { label: "Upload Resources", path: "/counsellor/resources" },
+      { label: "Upload Resources", path: "/counsellor/Addresource" },
       { label: "Availability", path: "/counsellor/slots" },
+
     ],
 
     admin: [

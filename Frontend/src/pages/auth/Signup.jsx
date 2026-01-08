@@ -5,7 +5,7 @@ import api from "../../api/axios";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+import {useAuth} from "@/context/AuthContext";
 
 
 
@@ -18,7 +18,11 @@ const Signup = () =>{
     const [role, setRole] = useState("student");
     const [specialization, setSpecialization] = useState("");
 
+    const {token} = useAuth();
+
     const navigate = useNavigate();
+
+
     useEffect(()=>{
         // Initialize form fields
         setName("");
@@ -28,6 +32,7 @@ const Signup = () =>{
         setCampusName("");
         setRole("student");
         setSpecialization("");  
+      
     },[]);
 
     const handleSubmit = async (e) => { 

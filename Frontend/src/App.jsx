@@ -7,19 +7,22 @@ import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/login";
 import Unauthorized from "./pages/Unauthorized";
 
-import StudentDashboard from "./pages/student/Dashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
-import CounsellorDashboard from "./pages/counsellor/Dashboard";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 
+import StudentDashboard from "./pages/student/Dashboard";
 import StudentResources from "./pages/student/Resource";
 import Allcounsellors from "./pages/student/Allcounsellors";
 import Helplines from "./pages/student/Helplines";
 import Counsellorslots from "./pages/student/Counsellorslots";
 import Forum from "./pages/student/Forum";
 import Screening from "./pages/student/Screening";
+
+import CounsellorDashboard from "./pages/counsellor/Dashboard";
+import Sessions from "./pages/counsellor/sessions";
+import Addresource from "./pages/counsellor/Addresource"
 
 
 function App() {
@@ -57,10 +60,14 @@ function App() {
           path="/counsellor/*"
           element={
             <DashboardLayout>
-              <CounsellorDashboard />
+              <Outlet/>
             </DashboardLayout>
           }
-        />
+        >
+          <Route index element={<CounsellorDashboard/>}/>
+          <Route path="sessions" element = {<Sessions/>}/>
+          <Route path = "Addresource" element = {<Addresource/>}/>
+        </Route>
       </Route>
 
       {/* Admin */}
@@ -72,7 +79,8 @@ function App() {
               <AdminDashboard />
             </DashboardLayout>
           }
-        />
+        >
+        </Route>
       </Route>
     </Routes>
   );
